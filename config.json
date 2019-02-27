@@ -1,11 +1,6 @@
 {
-  "DelayTime": 3600,
-  "Keywords": [
-    "Å×½ºÆ®"
-  ],
-  "LastDate": "",
-  "LastIndex": -1,
-  "Email": [
-
-  ]
+  "delayMilliSecond ": 3000,
+  "keywords": [],
+  "emails": [],
+  "PerMinute" : 60
 }
