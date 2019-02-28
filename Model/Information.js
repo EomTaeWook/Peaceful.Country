@@ -1,31 +1,37 @@
 'use strict'
-const Config = require("./Time.js")
+const Time = require("./Time.js")
 
 module.exports = class Information
 {
     constructor(index, title, writer, date)
     {
-        this.index = index;
-        this.title = title;
-        this.writer = writer;
-        this.date = date;
+        this._index = index;
+        this._title = title;
+        this._writer = writer;
+        this._date = date;
     }
     get Writer(){
-        return this.writer;
+        return this._writer;
     }
     get Index(){
-        return this.index;
+        return this._index;
     }
     get Title(){
-        return this.title;
+        return this._title;
     }
     get Date(){
-        return this.date;
+        return this._date;
     }
     get Time(){
-        if(/[0-9]{1,2}:[0-9]{1,2}/.test(this.date))
+        if(/[0-9]{1,2}:[0-9]{1,2}/g.test(this._date))
         {
-            let time = /[0-9]{1,2}/.exec(this.date);
+            let regex = new RegExp(/[0-9]{1,2}/, "g");
+            let time = [];
+            let field = undefined;
+            while(field = regex.exec(this._date))
+            {
+                time.push(field);
+            }
             return new Time(time[0], time[1]);
         }
         else

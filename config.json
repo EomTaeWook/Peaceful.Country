@@ -1,8 +1,10 @@
 {
-  "delayMilliSecond ": 3000,
+  "delayMillisecond": 2000,
   "keywords": [
     "갤럭시"
   ],
   "emails": [],
-  "PerMinute" : 60
+  "perMinute" : 10,
+  "index" : 0,
+  "isRecency" : false
 }

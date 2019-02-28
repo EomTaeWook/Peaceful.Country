@@ -4,37 +4,65 @@ module.exports = class Time
 {
     constructor(hour, minute)
     {
-        this.hour = hour;
-        this.minute = minute;        
+        this._hour = parseInt(hour) % 24;
+        this._minute = parseInt(minute) % 60;
     }
     get Hour(){
-        return this.hour;
+        return this._hour;
     }
     get Minute(){
-        return this.minute;
+        return this._minute;
+    }
+    AddMinute(minute)
+    {
+        let minValue = parseInt(minute);
+        if(!minValue)
+        {
+            return undefined;
+        }
+        
+        let min = this.Minute;
+        let hour = this.Hour;
+
+        if(minValue > 0)
+        {
+            min += minValue;
+            hour += Math.floor(min / 60);
+            min %= 60;
+        }
+        else if(minValue < 0)
+        {
+            min += Math.abs(minValue);
+            hour -= Math.floor(min / 60);
+            min  %= 60;
+        }
+
+        hour = Math.abs(Math.floor(hour % 24));
+
+        return new Time(hour, min);
     }
     CompareTo(other)
     {
-        if(this.hour < other.Hour)
+        if(this._hour < other.Hour)
         {
             return -1;
         }
-        else if(this.hour === other.Hour)
+        else if(this._hour === other.Hour)
         {
-            if(this.minute < other.Minute)
+            if(this._minute < other.Minute)
             {
                 return -1;
             }
-            else if(this.minute === other.minute)
+            else if(this._minute === other.minute)
             {
                 return 0;
             }
-            else if(this.minute > other.Minute)
+            else if(this._minute > other.Minute)
             {
                 return 1;
             }
         }
-        else if(this.hour > other.Hour)
+        else if(this._hour > other.Hour)
         {
             return 1
         }

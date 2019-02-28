@@ -1,20 +1,48 @@
-const fs = require("fs");
-const CrawlingManager = require("./CrawlingManager.js");
-const Config = require("./Model/Config.js")
+'use strict'
 
-fs.readFile("./config.json", async (err, data) => {
-    if(err) throw err;
-    let config = undefined;
-    if(!data | data.length == 0){
-        config = new Config(3000, [], [], 60);
-        await fs.writeFile("./config.json", JSON.stringify(config, null, 2), (err) => {
-            if(err) throw err;
-        });
+const fs = require("fs");
+const CrawlingManager = require("./Infrastructure/CrawlingManager.js");
+const AlertManager = require("./Infrastructure/AlertManager.js");
+const Config = require("./Model/Config.js");
+
+let isDebug = false;
+const args = process.argv;
+if(args.length > 2)
+{
+    if(args[2].toLowerCase() === "debug")
+    {
+        isDebug = true;
     }
-    else{
-        config = JSON.parse(data);
+}
+
+process.on('exit', ()=>{
+    if(crawlingManager)
+    {
+        console.log("exit event call");
     }
-    let crawlingManager = new CrawlingManager(config);
-    crawlingManager.Init();
-    crawlingManager.RunCrawling();
 });
+
+let data = fs.readFileSync("./config.json");
+let config = undefined;
+
+if(data | data.length == 0)
+{
+    config = new Config(3000, [], [], 60, 0, false);
+    fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
+}
+else
+{
+    let jsonObject = JSON.parse(data);
+    config = new Config(jsonObject.delayMillisecond,
+                        jsonObject.keywords,
+                        jsonObject.emails,
+                        jsonObject.perMinute,
+                        jsonObject.index,
+                        jsonObject.isRecency);
+}
+
+let crawlingManager = new CrawlingManager(config);
+crawlingManager.Init();
+let alertManager = new AlertManager();
+alertManager.Init(isDebug);
+crawlingManager.RunCrawling();

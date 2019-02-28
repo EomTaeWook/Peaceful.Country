@@ -2,35 +2,49 @@
 
 module.exports = class Config
 {
-    constructor(delayMilliSecond, keywords, emails, perMinute)
+    constructor(delayMillisecond, keywords, emails, perMinute, index, isRecency)
     {
-        this.delayMilliSecond = delayMilliSecond;
-        this.keywords = keywords;        
-        this.emails = emails;
-        this.perMinute = perMinute;
+        this._delayMillisecond = delayMillisecond;
+        this._keywords = keywords;        
+        this._emails = emails;
+        this._perMinute = perMinute;
+        this._index = index;
+        this._isRecency = isRecency;
     }
-    get DelayMilliSecond(){
-        return this.delayMilliSecond;
+    get DelayMillisecond(){
+        return this._delayMillisecond;
     }
-    set DelayMilliSecond(value){
-        this.delayMilliSecond = value;
+    set DelayMillisecond(value){
+        this._delayMillisecond = value;
     }
     get Keywords(){
-        return this.keywords;
+        return this._keywords;
     }
     set Keywords(value){
-        this.keywords = value;
+        this._keywords = value;
     }
     get Emails(){
-        return this.emails;
+        return this._emails;
     }
     set Emails(value){
-        this.emails = value;
+        this._emails = value;
     }
     get PerMinute(){
-        return this.perMinute;
+        return this._perMinute;
     }
     set PerMinute(value){
-        this.perMinute = value;
+        this._perMinute = value;
+    }
+    get Index(){
+        return this._index;
+    }
+    set Index(value){
+        this._index = value;
+    }
+    get IsRecency(){
+        return this._isRecency;
+    }
+    set IsRecency(value){
+        this._isRecency = value;
     }
 }

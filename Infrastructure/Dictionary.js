@@ -19,7 +19,11 @@ module.exports = class Dictionary
     }
     Remove(key)
     {
-        delete this._objectTable.key;
+        delete this._objectTable[key];
+    }
+    Clear()
+    {
+        Object.keys(this._objectTable).forEach(key => { delete this._objectTable[key]; });
     }
     ContainsKey(key)
     {

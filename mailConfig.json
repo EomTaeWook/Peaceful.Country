@@ -1,0 +1,7 @@
+{
+    "service": "naver",
+    "auth" :{
+        "user": "user",
+        "password": "password"
+    }
+}
