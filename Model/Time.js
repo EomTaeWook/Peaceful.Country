@@ -24,16 +24,16 @@ module.exports = class Time
         let min = this.Minute;
         let hour = this.Hour;
 
-        if(minValue > 0)
+        if(min + minValue > 0)
         {
             min += minValue;
             hour += Math.floor(min / 60);
             min %= 60;
         }
-        else if(minValue < 0)
+        else if(min + minValue <= 0)
         {
-            min += Math.abs(minValue);
-            hour -= Math.floor(min / 60);
+            min = Math.abs((60 + min) + minValue % 60);
+            hour -= Math.floor(minValue / 60) + Math.floor(min / 60);
             min  %= 60;
         }
 

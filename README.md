@@ -5,4 +5,4 @@
 
 실행방법
 
-cmd node main.js 
+cmd 창에서 node main.js 

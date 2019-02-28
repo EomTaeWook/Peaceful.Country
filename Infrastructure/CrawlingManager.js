@@ -2,6 +2,7 @@
 const RequestHelper = require("./RequestHelper.js");
 const Time = require("../Model/Time.js")
 const Cache = require("./Dictionary.js")
+const EventEmitter = require("events").EventEmitter;
 
 module.exports = class CrawlingManager
 {
@@ -12,6 +13,7 @@ module.exports = class CrawlingManager
         this._config = config;
         this._beginPage = 1;
         this._caches = new Cache();
+        this._eventEmit = new EventEmitter();
     }
     Init()
     {
@@ -21,22 +23,39 @@ module.exports = class CrawlingManager
     }
     async RunCrawling()
     {
-        console.log("RunCrawling!");
+        console.log("Run Crawling!");
+        let index = 1;
         while(true)
         {
-            let index = 1;
-            while(true)
+            let promises = [];
+            for (let i = 0; i < 10; i++)
             {
-                console.log(`Page : ${index} Request >>>`);
-                let result = await Process.bind(this)(index++);
-                await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 1000 + 1));
-                if(!result || this._config.IsRecency)
+                promises.push((async ()=>
                 {
-                    break;
-                }
+                    let result = await Process.bind(this)(index++);
+                    await Sleep(Math.floor(Math.random() * 100 + 1));
+                    return result;
+                })());
+            }
+            let results = await Promise.all(promises);
+            await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500 + 1));
+            // console.log(results);
+            if(!results.some(r=>r))
+            {
+                index = 1;
+                this._eventEmit.emit('crawlingComplete', this._caches);
             }
         }
     }
+}
+
+function Condition(item)
+{
+    if(item.Time === undefined)
+    {
+        return false;   
+    }
+    return item.Time.CompareTo(this._endTime) > 0;
 }
 
 async function Process(pageIndex)
@@ -50,14 +69,10 @@ async function Process(pageIndex)
         {
             return false;
         }
-        if(resultItems.some(r =>{ r.Time.CompareTo(this._endTime) > 1 })) //|| r.Time === undefined }))
+        if(!resultItems.some(Condition.bind(this)))
         {
             return false;
         }
-        // if(!result.some(r=>/[0-9]{1,2}:[0-9]{1,2}/.exec(r.date)))
-        // {
-        //     return false;
-        // }
         let items = resultItems.filter(r=>
             this._config.Keywords.some(k=>r.Title.includes(k))
         );

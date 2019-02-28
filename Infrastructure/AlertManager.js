@@ -3,11 +3,14 @@
 const mailer = require("nodemailer");
 const fs = require("fs");
 const MailConfig = require("../Model/MailConfig.js");
+const Cache = require("./Dictionary.js")
+const EventEmitter = require("events").EventEmitter;
 
 module.exports = class AlertManager
 {
     constructor()
     {
+        this._eventEmit = new EventEmitter();
     }
     Init(isDebug)
     {
@@ -29,6 +32,10 @@ module.exports = class AlertManager
 
         this._config = new MailConfig(jsonObj.service, jsonObj.auth.user, jsonObj.auth.password);
         
+        this._eventEmit.on("crawlingComplete", (datas) => 
+        {
+            console.log(datas);
+        });
     }
 
 }

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "charset": "^1.0.1",
+    "iconv-lite": "^0.4.24",
+    "nodemailer": "^5.1.1",
+    "request": "^2.88.0"
+  }
+}
