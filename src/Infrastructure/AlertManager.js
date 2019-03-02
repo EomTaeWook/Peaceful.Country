@@ -1,9 +1,8 @@
-'use strict'
+"use strict"
 
 const mailer = require("nodemailer");
 const fs = require("fs");
 const MailConfig = require("../Models/MailConfig.js");
-const Time = require("../Models/Time.js")
 
 module.exports = class AlertManager
 {
@@ -27,8 +26,8 @@ module.exports = class AlertManager
 
         this._config = new MailConfig(jsonObj.service, jsonObj.auth.user, jsonObj.auth.password);
 
-        let date = new Date();
-        this._beginTime = new Time(date.getHours(), date.getMinutes());
+        this._beginTime = new Date();
+        //this._beginTime = new Time(date.getHours(), date.getMinutes());
 
         eventEmit.on("crawlingComplete", (datas) => 
         {

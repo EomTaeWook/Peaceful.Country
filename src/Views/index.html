@@ -5,34 +5,32 @@
     <link rel="stylesheet" href="../wwwroot/css/metro-all.min.css">
     <link id="color-scheme" href="../wwwroot/css/schemes/darcula.min.css" rel="stylesheet">
     <title>평화로운 중고나라</title>
-    <style>
-        .pagination {
-            flex-wrap: wrap;
-        }
-    </style>
   </head>
   <body>
     <div>
-    <button class="button" id="btnConfig">
-      <span class="mif-cog"></span>
-    </button>
+        <ul class="v-menu" style="width: 50px; display: inline-block;">
+            <li><button class="button" id="btnConfig"><span class="mif-cog icon"></span>설정</button></li>
+            <li><button class="button" id="btnStart"><span class="mif-search icon"></span>시작</button></li>
+            <li hidden="true"><button class="button" id="btnStop"><span class="mif-stop icon"></span>정지</button></li>
+        </ul>
+        <div class="container" style="display: inline-block;">
+            <h5 class="text-center">키워드 조회 결과</h5>
+            <table class="table" id="table">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Title</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>이동</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+            </table>
+          </div>
     </div>
-    <div class="container">
-    <h5 class="text-center">키워드 조회 결과</h1>
-    <table class="table" id="table">
-        <thead>
-            <tr>
-                <th>Index</th>
-                <th>Title</th>
-                <th>Title</th>
-                <th>Date</th>
-                <th>이동</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-    </table>
-    </div>
+    <!-- Dialog -->
     <div class="dialog" data-role="dialog">
         <div class="dialog-title">설정</div>
         <div class="dialog-content">
@@ -40,8 +38,8 @@
               keywoards
             </label>
           <textarea id="keywoards" data-role="textarea"></textarea>
-          <label for="numPerMinute">지난 시간까지 검색(분)</label>
-          <input type="text" data-role="spinner" id="numPerMinute" data-buttons-position="right" value="1" data-min-Value="1">
+          <label for="numPerDay">경과된 날짜까지 검색(일)</label>
+          <input type="text" data-role="spinner" id="numPerDay" data-buttons-position="right" value="1" data-min-Value="1">
           <label for="alertPeriod">알람 주기(분)</label>            
           <input type="text" data-role="spinner" id="numAlertPeriod" data-buttons-position="right" value="30" data-min-Value="30">
           <!-- email -->

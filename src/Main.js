@@ -3,6 +3,7 @@
 const electron = require("electron");
 const BrowserWindow = electron.BrowserWindow;
 const app = electron.app;
+const ipcMain = electron.ipcMain;
 
 const fs = require("fs");
 const CrawlingManager = require("./Infrastructure/CrawlingManager.js");
@@ -10,13 +11,15 @@ const AlertManager = require("./Infrastructure/AlertManager.js");
 const Config = require("./Models/Config.js");
 const EventEmitter = require("events").EventEmitter;
 
+const Information = require("./Models/Information.js");
+
 let data = fs.readFileSync("./config.json");
 let config = undefined;
 let _eventEmit = new EventEmitter();
 
 if(data | data.length == 0)
 {
-    config = new Config(3000, [], [], 60, 0, false);
+    config = new Config(3000, [], [], 1, 0, false);
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
 }
 else
@@ -25,7 +28,7 @@ else
     config = new Config(jsonObject.delayMillisecond,
                         jsonObject.keywords,
                         jsonObject.emails,
-                        jsonObject.perMinute,
+                        jsonObject.perDay,
                         jsonObject.index,
                         jsonObject.isRecency);
 
@@ -44,15 +47,33 @@ app.on('ready', ()=> {
     mainWindow.setMenu(null);
     mainWindow.loadURL(`file://${__dirname}/Views/index.html`);
 
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', ()=> {
         mainWindow = null;
     });
 });
 
-app.on('window-all-closed', function () { 
+app.on("window-all-closed", () => { 
   if (process.platform !== 'darwin') {
     app.quit()
   }
+});
+
+ipcMain.on("start", (event, status)=>{
+    if(status === "true")
+    {
+        crawlingManager.RunCrawling();
+    }
+    else
+    {
+        crawlingManager.Stop();
+    }
+});
+
+_eventEmit.on("dataBind", (args)=>{
+    if(mainWindow)
+    {
+        mainWindow.webContents.send("dataBind", args);
+    }
 });

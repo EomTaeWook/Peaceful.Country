@@ -1,5 +1,4 @@
-'use strict'
-const Time = require("./Time.js")
+"use strict"
 
 module.exports = class Information
 {
@@ -8,7 +7,19 @@ module.exports = class Information
         this._index = index;
         this._title = title;
         this._writer = writer;
-        this._date = date;
+        if(/[0-9]{1,2}:[0-9]{1,2}/g.test(date))
+        {
+            let now = new Date().toLocaleDateString();
+            this._date = new Date(`${now.substring(0, now.length - 1)}` + " " + `${date}`);
+        }
+        else if(/[0-9]{4}.[0-9]{1,2}.[0-9]{1,2}/g.test(date))
+        {
+            this._date = new Date(`${date.substring(0, date.length - 1)}`);
+        }
+        else
+        {
+            this._date = undefined;
+        }
     }
     get Writer(){
         return this._writer;
@@ -21,22 +32,5 @@ module.exports = class Information
     }
     get Date(){
         return this._date;
-    }
-    get Time(){
-        if(/[0-9]{1,2}:[0-9]{1,2}/g.test(this._date))
-        {
-            let regex = new RegExp(/[0-9]{1,2}/, "g");
-            let time = [];
-            let field = undefined;
-            while(field = regex.exec(this._date))
-            {
-                time.push(field);
-            }
-            return new Time(time[0], time[1]);
-        }
-        else
-        {
-            return undefined;
-        }
     }
 }

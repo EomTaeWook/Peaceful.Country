@@ -1,13 +1,13 @@
-'use strict'
+"use strict"
 
 module.exports = class Config
 {
-    constructor(delayMillisecond, keywords, emails, perMinute, index, isRecency)
+    constructor(delayMillisecond, keywords, emails, perDay, index, isRecency)
     {
         this._delayMillisecond = delayMillisecond;
         this._keywords = keywords;        
         this._emails = emails;
-        this._perMinute = perMinute;
+        this._perDay = perDay;
         this._index = index;
         this._isRecency = isRecency;
     }
@@ -29,11 +29,11 @@ module.exports = class Config
     set Emails(value){
         this._emails = value;
     }
-    get PerMinute(){
-        return this._perMinute;
+    get PerDay(){
+        return this._perDay;
     }
-    set PerMinute(value){
-        this._perMinute = value;
+    set PerDay(value){
+        this._perDay = value;
     }
     get Index(){
         return this._index;

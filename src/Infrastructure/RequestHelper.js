@@ -1,4 +1,4 @@
-'use strict'
+"use strict"
 
 const req = require('request')
 const charset = require('charset')
@@ -51,7 +51,7 @@ module.exports = class RequestHelper
                                 let writer = /<a.*class=.*m-tcol-c.*]*>(.*?)<\/a>/g.exec(row[1]);
                                 console.log(index[2] + " : " + title[0] + " : " +writer[1] + " : " + date[0]);
                                 dataArray.push(new Information(index[2], title[0], writer[1], date[0]));
-                            }                            
+                            }     
                         }
                     }
                     else{

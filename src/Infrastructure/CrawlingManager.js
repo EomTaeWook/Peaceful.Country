@@ -1,6 +1,6 @@
-'use strict'
+"use strict"
+
 const RequestHelper = require("./RequestHelper.js");
-const Time = require("../Models/Time.js")
 const Cache = require("./Dictionary.js")
 
 module.exports = class CrawlingManager
@@ -12,20 +12,27 @@ module.exports = class CrawlingManager
         this._config = config;
         this._beginPage = 1;
         this._caches = new Cache();
+        this._isStart = false;
     }
     Init(eventEmit)
     {
-        let date = new Date();
-        this._beginTime = new Time(date.getHours(), date.getMinutes());
-        this._endTime = this._beginTime.AddMinute(-this._config.PerMinute);
+        this._beginTime = new Date();
+        this._endTime = new Date();
+        this._endTime.setDate(this._beginTime.getDate() - this._config.PerDay);
 
         this._eventEmit = eventEmit;
     }
     async RunCrawling()
     {
         console.log("Run Crawling!");
+        
+        if(this._isStart)
+        {
+            return;
+        }
         let index = 1;
-        while(true)
+        this._isStart = true;
+        while(this._isStart)
         {
             let promises = [];
             for (let i = 0; i < 10; i++)
@@ -38,28 +45,30 @@ module.exports = class CrawlingManager
                 })());
             }
             let results = await Promise.all(promises);
+            this._eventEmit.emit("dataBind", this._caches);
             await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500 + 1));
             // console.log(results);
             if(!results.some(r=>r))
             {
                 index = 1;
                 this._eventEmit.emit("crawlingComplete", this._caches);
-
-                let date = new Date();
-                this._beginTime.Hour = date.getHours();
-                this._beginTime.Minute = date.getMinutes();
+                this._beginTime = new Date();
             }
         }
+    }
+    Stop()
+    {
+        this._isStart = false;
     }
 }
 
 function Condition(item)
 {
-    if(item.Time === undefined)
+    if(item.Date === undefined)
     {
         return false;   
     }
-    return item.Time.CompareTo(this._endTime) > 0;
+    return item.Date - this._endTime >= 0;
 }
 
 async function Process(pageIndex)

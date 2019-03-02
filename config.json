@@ -4,7 +4,7 @@
     "갤럭시"
   ],
   "emails": [],
-  "perMinute" : 10,
+  "perDay" : 1,
   "alertPeriod" : 60,
   "index" : 0,
   "isRecency" : false
