@@ -1,8 +1,7 @@
 'use strict'
 const RequestHelper = require("./RequestHelper.js");
-const Time = require("../Model/Time.js")
+const Time = require("../Models/Time.js")
 const Cache = require("./Dictionary.js")
-const EventEmitter = require("events").EventEmitter;
 
 module.exports = class CrawlingManager
 {
@@ -13,13 +12,14 @@ module.exports = class CrawlingManager
         this._config = config;
         this._beginPage = 1;
         this._caches = new Cache();
-        this._eventEmit = new EventEmitter();
     }
-    Init()
+    Init(eventEmit)
     {
-        var date = new Date();
+        let date = new Date();
         this._beginTime = new Time(date.getHours(), date.getMinutes());
         this._endTime = this._beginTime.AddMinute(-this._config.PerMinute);
+
+        this._eventEmit = eventEmit;
     }
     async RunCrawling()
     {
@@ -43,7 +43,11 @@ module.exports = class CrawlingManager
             if(!results.some(r=>r))
             {
                 index = 1;
-                this._eventEmit.emit('crawlingComplete', this._caches);
+                this._eventEmit.emit("crawlingComplete", this._caches);
+
+                let date = new Date();
+                this._beginTime.Hour = date.getHours();
+                this._beginTime.Minute = date.getMinutes();
             }
         }
     }

@@ -5,6 +5,7 @@
   ],
   "emails": [],
   "perMinute" : 10,
+  "alertPeriod" : 60,
   "index" : 0,
   "isRecency" : false
 }

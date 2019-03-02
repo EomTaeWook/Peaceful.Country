@@ -3,7 +3,7 @@
 const req = require('request')
 const charset = require('charset')
 const iconv = require('iconv-lite')
-const Information = require("../Model/Information.js")
+const Information = require("../Models/Information.js")
 
 module.exports = class RequestHelper
 {

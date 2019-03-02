@@ -7,8 +7,14 @@ module.exports = class Time
         this._hour = parseInt(hour) % 24;
         this._minute = parseInt(minute) % 60;
     }
+    set Hour(value){
+        this._hour = value;
+    }
     get Hour(){
         return this._hour;
+    }
+    set Minute(value){
+        this._minute = value;
     }
     get Minute(){
         return this._minute;

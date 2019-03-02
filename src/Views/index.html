@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../wwwroot/css/metro-all.min.css">
+    <link id="color-scheme" href="../wwwroot/css/schemes/darcula.min.css" rel="stylesheet">
+    <title>평화로운 중고나라</title>
+    <style>
+        .pagination {
+            flex-wrap: wrap;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+    <button class="button" id="btnConfig">
+      <span class="mif-cog"></span>
+    </button>
+    </div>
+    <div class="container">
+    <h5 class="text-center">키워드 조회 결과</h1>
+    <table class="table" id="table">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Title</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>이동</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+    </table>
+    </div>
+    <div class="dialog" data-role="dialog">
+        <div class="dialog-title">설정</div>
+        <div class="dialog-content">
+          <label for="keywoards">
+              keywoards
+            </label>
+          <textarea id="keywoards" data-role="textarea"></textarea>
+          <label for="numPerMinute">지난 시간까지 검색(분)</label>
+          <input type="text" data-role="spinner" id="numPerMinute" data-buttons-position="right" value="1" data-min-Value="1">
+          <label for="alertPeriod">알람 주기(분)</label>            
+          <input type="text" data-role="spinner" id="numAlertPeriod" data-buttons-position="right" value="30" data-min-Value="30">
+          <!-- email -->
+          <div style="margin-top: 5px;">
+            <label for="emails">
+                emails
+            </label>
+            <ul data-role="listview" id="emails">
+              <li data-caption="testID@naver.com"></li>
+            </ul>
+            <hr>
+            <div class="grid">
+              <div class="row">
+                  <div class="cell-8">
+                      <input type="text" data-role="input">
+                  </div>
+                  <div class="cell-2"><button class="button" id="btnEmailAdd">추가</button></div>
+                  <div class="cell-2"><button class="button" id="btnEmailDelete">삭제</button></div>
+                </div>               
+              </div>
+            </div>
+            <!-- email -->
+        </div>
+        <div class="dialog-actions">
+            <button class="button js-dialog-close">닫기</button>
+            <button class="button primary js-dialog-close">저장</button>
+        </div>
+    </div>
+    
+    <script>
+      require("./index.js");
+    </script>
+    <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js" type="text/javascript"></script>
+  </body>
+</html>

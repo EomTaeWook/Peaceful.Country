@@ -2,24 +2,19 @@
 
 const mailer = require("nodemailer");
 const fs = require("fs");
-const MailConfig = require("../Model/MailConfig.js");
-const Cache = require("./Dictionary.js")
-const EventEmitter = require("events").EventEmitter;
+const MailConfig = require("../Models/MailConfig.js");
+const Time = require("../Models/Time.js")
 
 module.exports = class AlertManager
 {
     constructor()
     {
-        this._eventEmit = new EventEmitter();
+        
     }
-    Init(isDebug)
+    Init(eventEmit)
     {
         let path = "";
-        if(isDebug && fs.existsSync("mailConfig_Debug.json"))
-        {
-            path = "mailConfig_Debug.json";
-        }
-        else if(fs.existsSync("mailConfig.json"))
+        if(fs.existsSync("mailConfig.json"))
         {
             path = "mailConfig.json";
         }
@@ -31,8 +26,11 @@ module.exports = class AlertManager
         let jsonObj = JSON.parse(fs.readFileSync(`${path}`));
 
         this._config = new MailConfig(jsonObj.service, jsonObj.auth.user, jsonObj.auth.password);
-        
-        this._eventEmit.on("crawlingComplete", (datas) => 
+
+        let date = new Date();
+        this._beginTime = new Time(date.getHours(), date.getMinutes());
+
+        eventEmit.on("crawlingComplete", (datas) => 
         {
             console.log(datas);
         });
