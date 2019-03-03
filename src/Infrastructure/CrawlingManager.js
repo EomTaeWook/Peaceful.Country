@@ -35,6 +35,14 @@ module.exports = class CrawlingManager
         while(this._isStart)
         {
             let promises = [];
+            //최신
+            promises.push((async ()=>
+            {
+                let result = await Process.bind(this)(1);
+                await Sleep(Math.floor(Math.random() * 100 + 1));
+                return result;
+            })());
+            //이후 페이지들
             for (let i = 0; i < 10; i++)
             {
                 promises.push((async ()=>
@@ -45,7 +53,7 @@ module.exports = class CrawlingManager
                 })());
             }
             let results = await Promise.all(promises);
-            this._eventEmit.emit("dataBind", this._caches);
+            this._eventEmit.emit("dataBind", this._caches.Values());
             await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500 + 1));
             // console.log(results);
             if(!results.some(r=>r))

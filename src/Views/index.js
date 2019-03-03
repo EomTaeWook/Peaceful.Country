@@ -1,3 +1,5 @@
+"use strict"
+
 window.$ = window.jQuery = require("../wwwroot/js/jquery-3.3.1.min.js");
 const ipcRenderer = require("electron").ipcRenderer;
 
@@ -25,4 +27,18 @@ const ipcRenderer = require("electron").ipcRenderer;
 
  ipcRenderer.on("dataBind", (event, args) =>{
      console.log(args);
+    let body = document.getElementById("body");
+    body.innerHTML = "";
+    for(let i=args.length - 1; i>=0; --i)
+    {
+        let row = body.insertRow(body.rows.length);
+        let index = row.insertCell(0);
+        index.innerHTML = args[i]._index;
+        let title = row.insertCell(1);
+        title.innerHTML = args[i]._title;
+        let date = row.insertCell(2);
+        date.innerHTML = new Date(args[i]._date).toLocaleDateString();
+        let move = row.insertCell(3);
+        move.innerHTML = "<a href=\"#\" onclick=\"window.open(\"https://cafe.naver.com/joonggonara/" + args[i]._index + "\"', '_blank', 'width=600 height=600')\">이동</a>"        
+    }
  });

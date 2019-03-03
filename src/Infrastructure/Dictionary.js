@@ -21,6 +21,14 @@ module.exports = class Dictionary
     {
         delete this._objectTable[key];
     }
+    Values()
+    {
+        let values = [];
+        Object.keys(this._objectTable).forEach((key)=>{
+            values.push(this._objectTable[key]); 
+        });
+        return values;
+    }
     Clear()
     {
         Object.keys(this._objectTable).forEach(key => { delete this._objectTable[key]; });

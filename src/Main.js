@@ -11,8 +11,6 @@ const AlertManager = require("./Infrastructure/AlertManager.js");
 const Config = require("./Models/Config.js");
 const EventEmitter = require("events").EventEmitter;
 
-const Information = require("./Models/Information.js");
-
 let data = fs.readFileSync("./config.json");
 let config = undefined;
 let _eventEmit = new EventEmitter();
