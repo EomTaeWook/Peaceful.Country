@@ -114,7 +114,7 @@ ipcRenderer.on("getConfig",(event, args)=>{
 
 
  ipcRenderer.on("dataBind", (event, args) =>{
-    //console.log(args);
+    console.log(args);
     let pageHtml = document.getElementsByClassName("pagination")[0];
     pageHtml.innerHTML = "";
     CreatePage(args, pageHtml);

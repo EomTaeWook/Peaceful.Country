@@ -83,6 +83,8 @@ ipcMain.on("setConfig", (event, args) =>{
     config.PerDay = args._perDay;
     config.AlertPeriod = args._alertPeriod;
 
+    fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
+    
     crawlingManager.Init(_eventEmit, config);
     alertManager.Init(_eventEmit, config);
 });
