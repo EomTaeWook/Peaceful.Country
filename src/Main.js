@@ -10,6 +10,7 @@ const CrawlingManager = require("./Infrastructure/CrawlingManager.js");
 const AlertManager = require("./Infrastructure/AlertManager.js");
 const Config = require("./Models/Config.js");
 const EventEmitter = require("events").EventEmitter;
+const PageInfo = require("./Models/PageInfo.js");
 
 let data = fs.readFileSync("./config.json");
 let config = undefined;
@@ -68,10 +69,10 @@ ipcMain.on("start", (event, status)=>{
         crawlingManager.Stop();
     }
 });
-
-_eventEmit.on("dataBind", (args)=>{
+ipcMain.on("dataBind", (event, page)=>{
+    
     if(mainWindow)
     {
-        mainWindow.webContents.send("dataBind", args);
+        mainWindow.webContents.send("dataBind", new PageInfo(crawlingManager.Total(), page, 20, crawlingManager.Page(page, 20)));
     }
 });

@@ -15,19 +15,13 @@ module.exports = class Dictionary
         if(!this.ContainsKey(key))
         {
             this.Add(key, value);
+            return true;
         }
+        return false;
     }
     Remove(key)
     {
         delete this._objectTable[key];
-    }
-    Values()
-    {
-        let values = [];
-        Object.keys(this._objectTable).forEach((key)=>{
-            values.push(this._objectTable[key]); 
-        });
-        return values;
     }
     Clear()
     {
@@ -36,5 +30,17 @@ module.exports = class Dictionary
     ContainsKey(key)
     {
         return this._objectTable.hasOwnProperty(key);
+    }
+    get Count()
+    {
+        return Object.keys(this._objectTable).length;
+    }
+    get Values()
+    {
+        let values = [];
+        Object.keys(this._objectTable).forEach(key =>{
+            values.push(this._objectTable[key]); 
+        });
+        return values;
     }
 }

@@ -39,7 +39,7 @@ module.exports = class CrawlingManager
             promises.push((async ()=>
             {
                 let result = await Process.bind(this)(1);
-                await Sleep(Math.floor(Math.random() * 100 + 1));
+                await Sleep(Math.floor(Math.random() * 500 + 1));
                 return result;
             })());
             //이후 페이지들
@@ -48,12 +48,11 @@ module.exports = class CrawlingManager
                 promises.push((async ()=>
                 {
                     let result = await Process.bind(this)(index++);
-                    await Sleep(Math.floor(Math.random() * 100 + 1));
+                    await Sleep(Math.floor(Math.random() * 500 + 1));
                     return result;
                 })());
             }
             let results = await Promise.all(promises);
-            this._eventEmit.emit("dataBind", this._caches.Values());
             await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500 + 1));
             // console.log(results);
             if(!results.some(r=>r))
@@ -67,6 +66,14 @@ module.exports = class CrawlingManager
     Stop()
     {
         this._isStart = false;
+    }
+    Page(page, row)
+    {
+        return this._caches.Values.slice((page - 1) * row,  row);
+    }
+    Total()
+    {
+        return this._caches.Count;
     }
 }
 
