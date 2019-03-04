@@ -18,7 +18,7 @@ let _eventEmit = new EventEmitter();
 
 if(data | data.length == 0)
 {
-    config = new Config(3000, [], [], 1, 0, false);
+    config = new Config(3000, [], [], 1, 60, 0, false);
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
 }
 else
@@ -28,21 +28,22 @@ else
                         jsonObject.keywords,
                         jsonObject.emails,
                         jsonObject.perDay,
+                        jsonObject.alertPeriod,
                         jsonObject.index,
                         jsonObject.isRecency);
 
 }
 
-let crawlingManager = new CrawlingManager(config);
-crawlingManager.Init(_eventEmit);
+let crawlingManager = new CrawlingManager();
+crawlingManager.Init(_eventEmit, config);
 let alertManager = new AlertManager();
-alertManager.Init(_eventEmit);
+alertManager.Init(_eventEmit, config);
 
 let mainWindow = null;
 
 app.on('ready', ()=> {
 
-    mainWindow = new BrowserWindow({width: 800, height: 700});
+    mainWindow = new BrowserWindow({width: 1270, height: 860});
     mainWindow.setMenu(null);
     mainWindow.loadURL(`file://${__dirname}/Views/index.html`);
 
@@ -50,6 +51,7 @@ app.on('ready', ()=> {
 
     mainWindow.on('closed', ()=> {
         mainWindow = null;
+        crawlingManager.Stop();
     });
 });
 
@@ -57,6 +59,7 @@ app.on("window-all-closed", () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+  crawlingManager.Stop();
 });
 
 ipcMain.on("start", (event, status)=>{
@@ -68,6 +71,20 @@ ipcMain.on("start", (event, status)=>{
     {
         crawlingManager.Stop();
     }
+});
+
+ipcMain.on("getConfig", (event) =>{
+    event.sender.send("getConfig", config);
+});
+
+ipcMain.on("setConfig", (event, args) =>{
+    config.Keywords = args._keywords;
+    config.Emails = args._emails;
+    config.PerDay = args._perDay;
+    config.AlertPeriod = args._alertPeriod;
+
+    crawlingManager.Init(_eventEmit, config);
+    alertManager.Init(_eventEmit, config);
 });
 ipcMain.on("dataBind", (event, page)=>{
     

@@ -5,17 +5,18 @@ const Cache = require("./Dictionary.js")
 
 module.exports = class CrawlingManager
 {
-    constructor(config)
+    constructor()
     {
         this._requestHelper = new RequestHelper();
         this._url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10050146&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="
-        this._config = config;
+        
         this._beginPage = 1;
         this._caches = new Cache();
         this._isStart = false;
     }
-    Init(eventEmit)
+    Init(eventEmit, config)
     {
+        this._config = config;
         this._beginTime = new Date();
         this._endTime = new Date();
         this._endTime.setDate(this._beginTime.getDate() - this._config.PerDay);
@@ -58,7 +59,6 @@ module.exports = class CrawlingManager
             if(!results.some(r=>r))
             {
                 index = 1;
-                this._eventEmit.emit("crawlingComplete", this._caches);
                 this._beginTime = new Date();
             }
         }
@@ -69,7 +69,8 @@ module.exports = class CrawlingManager
     }
     Page(page, row)
     {
-        return this._caches.Values.slice((page - 1) * row,  row);
+        let index = (page - 1) * row;
+        return this._caches.Values.slice(index, index + row);
     }
     Total()
     {

@@ -10,8 +10,9 @@ module.exports = class AlertManager
     {
         
     }
-    Init(eventEmit)
+    Init(eventEmit, config)
     {
+        this._config = config;
         let path = "";
         if(fs.existsSync("mailConfig.json"))
         {

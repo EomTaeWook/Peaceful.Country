@@ -2,11 +2,13 @@
 
 window.$ = window.jQuery = require("../wwwroot/js/jquery-3.3.1.min.js");
 const ipcRenderer = require("electron").ipcRenderer;
+const Config = require("../Models/Config.js");
 
  let btnConfig = document.getElementById("btnConfig");
  btnConfig.addEventListener("click", (event)=>{
      event.preventDefault();
-     Metro.dialog.open(".dialog");
+     btnStop.click();
+     ipcRenderer.send("getConfig");
  });
 
  let page = 1;
@@ -35,23 +37,166 @@ const ipcRenderer = require("electron").ipcRenderer;
      if(reqeustData !== undefined)
      {
         clearInterval(reqeustData);
+        reqeustData = undefined;
      }
  });
 
+let btnEmailAdd = document.getElementById("btnEmailAdd");
+btnEmailAdd.addEventListener("click", (event)=>{
+    event.preventDefault();
+    let input = document.getElementById("txtEmail").value;
+    if(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g.test(input))
+    {
+        CreateEmail(input);
+    }
+    else
+    {
+        Metro.dialog.create({
+            title: "잘못된 Email 형식입니다."
+        });
+    }
+});
+
+let btnEmailDelete = document.getElementById("btnEmailDelete");
+btnEmailDelete.addEventListener("click", (event)=>{
+    event.preventDefault();
+    let email = document.getElementById("emails");
+    let item = document.querySelector(".current");
+    if(item)
+    {
+        email.removeChild(item);
+    }
+});
+
+let btnSave = document.getElementById("btnSave");
+btnSave.addEventListener("click", (event)=>{
+    event.preventDefault();
+
+    let keywordsHtml = document.getElementById("keywoards");
+    if(keywordsHtml.value === undefined || keywordsHtml.value === "")
+    {
+        Metro.dialog.create({
+            title: "키워드는 한개 이상 입력하세요."
+        });
+    }
+    let keywords = keywordsHtml.value.split(",");
+    let perDay = document.getElementById("numPerDay").value;
+    let alertPeriod = document.getElementById("numAlertPeriod").value;
+    let emailHtml = document.getElementById("emails");
+    let emailDatas= emailHtml.querySelectorAll(".caption");
+    let emails = [];
+    emailDatas.forEach(item =>{
+        emails.push(item.innerHTML);
+    });
+
+    let config = new Config(-1,keywords, emails, perDay, alertPeriod, 0, false );
+    console.log(config);
+    ipcRenderer.send("setConfig", config);
+    Metro.dialog.close(".dialog");
+});
+
+ipcRenderer.on("getConfig",(event, args)=>{
+    //console.log(args);
+    let keywords = document.getElementById("keywoards");
+    keywords.innerHTML = args._keywords.toString();
+    let perDay = document.getElementById("numPerDay");
+    perDay.value = args._perDay;
+    let alertPeriod = document.getElementById("numAlertPeriod");
+    alertPeriod.value = args._alertPeriod;
+
+    let email = document.getElementById("emails");
+    email.innerHTML = "";
+
+    args._emails.forEach(CreateEmail);
+    Metro.dialog.open(".dialog");
+});
+
+
+
  ipcRenderer.on("dataBind", (event, args) =>{
-    console.log(args);
-    // let body = document.getElementById("body");
-    // body.innerHTML = "";
-    // for(let i=args.length - 1; i>=0; --i)
-    // {
-    //     let row = body.insertRow(body.rows.length);
-    //     let index = row.insertCell(0);
-    //     index.innerHTML = args[i]._index;
-    //     let title = row.insertCell(1);
-    //     title.innerHTML = args[i]._title;
-    //     let date = row.insertCell(2);
-    //     date.innerHTML = new Date(args[i]._date).toLocaleDateString();
-    //     let move = row.insertCell(3);
-    //     move.innerHTML = "<a href=\"#\" onclick=\"window.open(\"https://cafe.naver.com/joonggonara/" + args[i]._index + "\"', '_blank', 'width=600 height=600')\">이동</a>"        
-    // }
+    //console.log(args);
+    let pageHtml = document.getElementsByClassName("pagination")[0];
+    pageHtml.innerHTML = "";
+    CreatePage(args, pageHtml);
+
+    let body = document.getElementById("body");
+    body.innerHTML = "";
+
+    for(let i=args._datas.length - 1; i>=0; --i)
+    {
+        let row = body.insertRow(body.rows.length);
+        let index = row.insertCell(0);
+        index.innerHTML = args._datas[i]._index;
+        let title = row.insertCell(1);
+        title.innerHTML = args._datas[i]._title;
+        let date = row.insertCell(2);
+        date.innerHTML = new Date(args._datas[i]._date).toLocaleDateString();
+
+        let move = row.insertCell(3);
+        let a = document.createElement("a");
+        a.href = "#";
+        a.onclick = ()=>{
+            window.open(`https://cafe.naver.com/joonggonara/${args._datas[i]._index}`, "_blank", "width=600 height = 600");
+            return false;
+        }
+        a.innerText = "이동";
+        move.appendChild(a);
+    }
  });
+
+function CreateEmail(value)
+{
+    let email = document.getElementById("emails");
+    let li = document.createElement("li");
+    li.className = "node";
+    li.dataset.caption = value;
+    let div = document.createElement("div");
+    div.className = "data";
+    let divCaption = document.createElement("div");
+    divCaption.className = "caption";
+    divCaption.innerHTML = value;
+    div.appendChild(divCaption);
+    li.appendChild(div);
+    email.appendChild(li);
+}
+
+ function SelectPage(item)
+ {
+     page = item;
+     ipcRenderer.send("dataBind", page);
+     return false;
+ }
+ function CreatePage(pageInfo, parentHtml)
+ {
+     if(pageInfo._currentPage > 10)
+     {
+        let prev = document.createElement("a");
+        prev.innerHTML = "&laquo;";
+        prev.onclick = () =>{
+            SelectPage(pageInfo.MinPage - 10);
+        }
+        parentHtml.appendChild(prev);
+     }
+     for(let i=pageInfo.MinPage; i<pageInfo.MaxPage; ++i)
+     {
+        let a = document.createElement("a");
+        if(i === pageInfo._currentPage)
+        {
+            a.className = "active";
+        }
+        a.onclick = ()=>{
+            SelectPage(i);
+        };
+        a.innerHTML = `${i}`;
+        parentHtml.appendChild(a);
+     }
+     if(pageInfo.MaxPage < pageInfo.PageCount)
+     {
+        let next = document.createElement("a");
+        next.innerHTML = "&raquo;";
+        next.onclick = () =>{
+            SelectPage(pageInfo.MaxPage);
+        }
+        parentHtml.appendChild(next);
+     }
+ }

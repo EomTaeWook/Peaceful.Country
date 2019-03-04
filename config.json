@@ -3,7 +3,9 @@
   "keywords": [
     "갤럭시"
   ],
-  "emails": [],
+  "emails": [
+    "enter0917@naver.com"
+  ],
   "perDay" : 1,
   "alertPeriod" : 60,
   "index" : 0,

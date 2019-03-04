@@ -2,49 +2,69 @@
 
 module.exports = class Config
 {
-    constructor(delayMillisecond, keywords, emails, perDay, index, isRecency)
+    constructor(delayMillisecond, keywords, emails, perDay, alertPeriod, index, isRecency)
     {
         this._delayMillisecond = delayMillisecond;
         this._keywords = keywords;        
         this._emails = emails;
         this._perDay = perDay;
+        this._alertPeriod = alertPeriod;
         this._index = index;
         this._isRecency = isRecency;
     }
-    get DelayMillisecond(){
+    get DelayMillisecond()
+    {
         return this._delayMillisecond;
     }
-    set DelayMillisecond(value){
+    set DelayMillisecond(value)
+    {
         this._delayMillisecond = value;
     }
     get Keywords(){
         return this._keywords;
     }
-    set Keywords(value){
+    set Keywords(value)
+    {
         this._keywords = value;
     }
-    get Emails(){
+    get Emails()
+    {
         return this._emails;
     }
-    set Emails(value){
+    set Emails(value)
+    {
         this._emails = value;
     }
-    get PerDay(){
+    get PerDay()
+    {
         return this._perDay;
     }
-    set PerDay(value){
+    set PerDay(value)
+    {
         this._perDay = value;
     }
-    get Index(){
+    get AlertPeriod()
+    {
+        return this._alertPeriod;
+    }
+    set AlertPeriod(value)
+    {
+        this._alertPeriod = value;
+    }
+    get Index()
+    {
         return this._index;
     }
-    set Index(value){
+    set Index(value)
+    {
         this._index = value;
     }
-    get IsRecency(){
+    get IsRecency()
+    {
         return this._isRecency;
     }
-    set IsRecency(value){
+    set IsRecency(value)
+    {
         this._isRecency = value;
     }
 }

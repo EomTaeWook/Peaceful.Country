@@ -2,20 +2,26 @@
 
 module.exports = class PageInfo
 {
-    constructor(total, page, rows, datas)
+    constructor(total, currentPage, rows, datas)
     {
         this._total = total;
-        this._page = page;
+        this._currentPage = currentPage;
         this._rows = rows;
         this._datas = datas;
+
+        this.MinPage = Math.floor((this._currentPage - 1) / 10) * 10 + 1;
+        this.MaxPage = this.MinPage + 10;
+        this.PageCount = Math.floor(this._total / this._rows);
+        this.PageCount == this.MinPage ? this.MinPage + 1 : this.PageCount;
+        this.MaxPage = this.PageCount < this.MaxPage ? this.PageCount + 1 : this.MaxPage;
     }
     get Row()
     {
         return this._rows;
     }
-    get Page()
+    get CurrentPage()
     {
-        return this._page;
+        return this._currentPage;
     }
     get Total()
     {
