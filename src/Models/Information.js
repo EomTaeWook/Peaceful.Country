@@ -4,33 +4,33 @@ module.exports = class Information
 {
     constructor(index, title, writer, date)
     {
-        this._index = index;
-        this._title = title;
-        this._writer = writer;
+        this.index = index;
+        this.title = title;
+        this.writer = writer;
         if(/[0-9]{1,2}:[0-9]{1,2}/g.test(date))
         {
             let now = new Date().toLocaleDateString();
-            this._date = new Date(`${now.substring(0, now.length - 1)}` + " " + `${date}`);
+            this.date = new Date(`${now.substring(0, now.length - 1)}` + " " + `${date}`);
         }
         else if(/[0-9]{4}.[0-9]{1,2}.[0-9]{1,2}/g.test(date))
         {
-            this._date = new Date(`${date.substring(0, date.length - 1)}`);
+            this.date = new Date(`${date.substring(0, date.length - 1)}`);
         }
         else
         {
-            this._date = undefined;
+            this.date = undefined;
         }
     }
     get Writer(){
-        return this._writer;
+        return this.writer;
     }
     get Index(){
-        return this._index;
+        return this.index;
     }
     get Title(){
-        return this._title;
+        return this.title;
     }
     get Date(){
-        return this._date;
+        return this.date;
     }
 }

@@ -23,45 +23,9 @@ module.exports = class CrawlingManager
 
         this._eventEmit = eventEmit;
     }
-    async RunCrawling()
+    Start()
     {
-        console.log("Run Crawling!");
-        
-        if(this._isStart)
-        {
-            return;
-        }
-        let index = 1;
-        this._isStart = true;
-        while(this._isStart)
-        {
-            let promises = [];
-            //최신
-            promises.push((async ()=>
-            {
-                let result = await Process.bind(this)(1);
-                await Sleep(2000 + Math.floor(Math.random() * 500) + 1);
-                return result;
-            })());
-            //이후 페이지들
-            for (let i = 0; i < 10; i++)
-            {
-                promises.push((async ()=>
-                {
-                    let result = await Process.bind(this)(index++);
-                    await Sleep(2000 + Math.floor(Math.random() * 500) + 1);
-                    return result;
-                })());
-            }
-            let results = await Promise.all(promises);
-            await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500) + 1);
-            // console.log(results);
-            if(!results.some(r=>r))
-            {
-                index = 1;
-                this._beginTime = new Date();
-            }
-        }
+        RunCrawling.bind(this)();
     }
     Stop()
     {
@@ -86,7 +50,46 @@ function Condition(item)
     }
     return item.Date - this._endTime >= 0;
 }
-
+async function RunCrawling()
+{
+    console.log("Run Crawling!");
+    
+    if(this._isStart)
+    {
+        return;
+    }
+    let index = 1;
+    this._isStart = true;
+    while(this._isStart)
+    {
+        let promises = [];
+        //최신
+        promises.push((async ()=>
+        {
+            let result = await Process.bind(this)(1);
+            await Sleep(2000 + Math.floor(Math.random() * 500) + 1);
+            return result;
+        })());
+        //이후 페이지들
+        for (let i = 0; i < 10; i++)
+        {
+            promises.push((async ()=>
+            {
+                let result = await Process.bind(this)(index++);
+                await Sleep(2000 + Math.floor(Math.random() * 500) + 1);
+                return result;
+            })());
+        }
+        let results = await Promise.all(promises);
+        await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500) + 1);
+        // console.log(results);
+        if(!results.some(r=>r))
+        {
+            index = 1;
+            this._beginTime = new Date();
+        }
+    }
+}
 async function Process(pageIndex)
 {
     try

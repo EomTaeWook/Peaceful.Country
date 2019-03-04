@@ -6,13 +6,14 @@ const MailConfig = require("../Models/MailConfig.js");
 
 module.exports = class AlertManager
 {
+    
     constructor()
     {
-        
+        this._interval = undefined;
     }
     Init(eventEmit, config)
     {
-        this._config = config;
+        this._alertPeriod = config.AlertPeriod * 60 * 1000;
         let path = "";
         if(fs.existsSync("mailConfig.json"))
         {
@@ -25,15 +26,39 @@ module.exports = class AlertManager
         }
         let jsonObj = JSON.parse(fs.readFileSync(`${path}`));
 
+        this._eventEmit = eventEmit;
         this._config = new MailConfig(jsonObj.service, jsonObj.auth.user, jsonObj.auth.password);
-
         this._beginTime = new Date();
-        //this._beginTime = new Time(date.getHours(), date.getMinutes());
-
-        eventEmit.on("crawlingComplete", (datas) => 
+    }
+    Start()
+    {
+        if(this._interval) return;
+        this._interval = setInterval(()=>{
+            this._eventEmit.emit("alert");
+         }, this._alertPeriod);
+    }
+    Stop()
+    {
+        if(this._alertPeriod)
         {
-            console.log(datas);
+            clearInterval(this._alertPeriod)
+            this._alertPeriod = undefined;
+        }
+    }
+    SendMails(toEmail, subject, content)
+    {
+        let trasport = mailer.createTransport(JSON.stringify(this._config));
+        
+        let mailOptions = {
+            from: this._config.Auth.user,
+            to: toEmail,
+            subject: subject,
+            text: content
+        };
+
+        trasport.sendMail(mailOptions, (err, resolve) => {
+            if(err) throw err;
+            trasport.close();
         });
     }
-
 }

@@ -4,67 +4,67 @@ module.exports = class Config
 {
     constructor(delayMillisecond, keywords, emails, perDay, alertPeriod, index, isRecency)
     {
-        this._delayMillisecond = delayMillisecond;
-        this._keywords = keywords;        
-        this._emails = emails;
-        this._perDay = perDay;
-        this._alertPeriod = alertPeriod;
-        this._index = index;
-        this._isRecency = isRecency;
+        this.delayMillisecond = delayMillisecond;
+        this.keywords = keywords;        
+        this.emails = emails;
+        this.perDay = perDay;
+        this.alertPeriod = alertPeriod;
+        this.index = index;
+        this.isRecency = isRecency;
     }
     get DelayMillisecond()
     {
-        return this._delayMillisecond;
+        return this.delayMillisecond;
     }
     set DelayMillisecond(value)
     {
-        this._delayMillisecond = value;
+        this.delayMillisecond = value;
     }
     get Keywords(){
-        return this._keywords;
+        return this.keywords;
     }
     set Keywords(value)
     {
-        this._keywords = value;
+        this.keywords = value;
     }
     get Emails()
     {
-        return this._emails;
+        return this.emails;
     }
     set Emails(value)
     {
-        this._emails = value;
+        this.emails = value;
     }
     get PerDay()
     {
-        return this._perDay;
+        return this.perDay;
     }
     set PerDay(value)
     {
-        this._perDay = value;
+        this.perDay = value;
     }
     get AlertPeriod()
     {
-        return this._alertPeriod;
+        return this.alertPeriod;
     }
     set AlertPeriod(value)
     {
-        this._alertPeriod = value;
+        this.alertPeriod = value;
     }
     get Index()
     {
-        return this._index;
+        return this.index;
     }
     set Index(value)
     {
-        this._index = value;
+        this.index = value;
     }
     get IsRecency()
     {
-        return this._isRecency;
+        return this.isRecency;
     }
     set IsRecency(value)
     {
-        this._isRecency = value;
+        this.isRecency = value;
     }
 }

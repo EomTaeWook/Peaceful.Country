@@ -1,13 +1,13 @@
 {
-  "_delayMillisecond": 2500,
-  "_keywords": [
+  "delayMillisecond": 2500,
+  "keywords": [
     "갤럭시"
   ],
-  "_emails": [
+  "emails": [
     "enter0917@naver.com"
   ],
-  "_perDay": "1",
-  "_alertPeriod": "60",
-  "_index": 0,
-  "_isRecency": false
+  "perDay": "1",
+  "alertPeriod": "60",
+  "index": 0,
+  "isRecency": false
 }

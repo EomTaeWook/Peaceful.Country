@@ -41,7 +41,7 @@ alertManager.Init(_eventEmit, config);
 
 let mainWindow = null;
 
-app.on('ready', ()=> {
+app.on("ready", ()=> {
 
     mainWindow = new BrowserWindow({width: 1270, height: 860});
     mainWindow.setMenu(null);
@@ -51,6 +51,7 @@ app.on('ready', ()=> {
 
     mainWindow.on('closed', ()=> {
         mainWindow = null;
+        alertManager.Stop();
         crawlingManager.Stop();
     });
 });
@@ -59,16 +60,23 @@ app.on("window-all-closed", () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+  alertManager.Stop();
   crawlingManager.Stop();
+});
+
+_eventEmit.on("alert", ()=>{
+    console.log("alert");
 });
 
 ipcMain.on("start", (event, status)=>{
     if(status === "true")
     {
-        crawlingManager.RunCrawling();
+        crawlingManager.Start();
+        alertManager.Start();
     }
     else
     {
+        alertManager.Stop();
         crawlingManager.Stop();
     }
 });
@@ -84,7 +92,7 @@ ipcMain.on("setConfig", (event, args) =>{
     config.AlertPeriod = args._alertPeriod;
 
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
-    
+
     crawlingManager.Init(_eventEmit, config);
     alertManager.Init(_eventEmit, config);
 });

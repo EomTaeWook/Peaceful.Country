@@ -98,16 +98,16 @@ btnSave.addEventListener("click", (event)=>{
 ipcRenderer.on("getConfig",(event, args)=>{
     //console.log(args);
     let keywords = document.getElementById("keywoards");
-    keywords.innerHTML = args._keywords.toString();
+    keywords.innerHTML = args.keywords.toString();
     let perDay = document.getElementById("numPerDay");
-    perDay.value = args._perDay;
+    perDay.value = args.perDay;
     let alertPeriod = document.getElementById("numAlertPeriod");
-    alertPeriod.value = args._alertPeriod;
+    alertPeriod.value = args.alertPeriod;
 
     let email = document.getElementById("emails");
     email.innerHTML = "";
 
-    args._emails.forEach(CreateEmail);
+    args.emails.forEach(CreateEmail);
     Metro.dialog.open(".dialog");
 });
 
@@ -122,21 +122,21 @@ ipcRenderer.on("getConfig",(event, args)=>{
     let body = document.getElementById("body");
     body.innerHTML = "";
 
-    for(let i=args._datas.length - 1; i>=0; --i)
+    for(let i=args.datas.length - 1; i>=0; --i)
     {
         let row = body.insertRow(body.rows.length);
         let index = row.insertCell(0);
-        index.innerHTML = args._datas[i]._index;
+        index.innerHTML = args.datas[i].index;
         let title = row.insertCell(1);
-        title.innerHTML = args._datas[i]._title;
+        title.innerHTML = args.datas[i].title;
         let date = row.insertCell(2);
-        date.innerHTML = new Date(args._datas[i]._date).toLocaleDateString();
+        date.innerHTML = new Date(args.datas[i].date).toLocaleDateString();
 
         let move = row.insertCell(3);
         let a = document.createElement("a");
         a.href = "#";
         a.onclick = ()=>{
-            window.open(`https://cafe.naver.com/joonggonara/${args._datas[i]._index}`, "_blank", "width=600 height = 600");
+            window.open(`https://cafe.naver.com/joonggonara/${args.datas[i].index}`, "_blank", "width=600 height = 600");
             return false;
         }
         a.innerText = "이동";
@@ -168,7 +168,7 @@ function CreateEmail(value)
  }
  function CreatePage(pageInfo, parentHtml)
  {
-     if(pageInfo._currentPage > 10)
+     if(pageInfo.currentPage > 10)
      {
         let prev = document.createElement("a");
         prev.innerHTML = "&laquo;";
@@ -180,7 +180,7 @@ function CreateEmail(value)
      for(let i=pageInfo.MinPage; i<pageInfo.MaxPage; ++i)
      {
         let a = document.createElement("a");
-        if(i === pageInfo._currentPage)
+        if(i === pageInfo.currentPage)
         {
             a.className = "active";
         }
