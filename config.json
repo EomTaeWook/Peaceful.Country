@@ -4,10 +4,11 @@
     "갤럭시"
   ],
   "emails": [
-    "enter0917@naver.com"
+    ""
   ],
   "perDay": "1",
   "alertPeriod": "60",
   "index": 0,
-  "isRecency": false
+  "isRecency": false,
+  "isAlert": false
 }

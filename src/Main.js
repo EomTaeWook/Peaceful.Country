@@ -18,7 +18,7 @@ let _eventEmit = new EventEmitter();
 
 if(data | data.length == 0)
 {
-    config = new Config(3000, [], [], 1, 60, 0, false);
+    config = new Config(3000, [], [], 1, 60, 0, false, true);
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
 }
 else
@@ -30,7 +30,8 @@ else
                         jsonObject.perDay,
                         jsonObject.alertPeriod,
                         jsonObject.index,
-                        jsonObject.isRecency);
+                        jsonObject.isRecency,
+                        jsonObject.isAlert);
 
 }
 
@@ -47,9 +48,9 @@ app.on("ready", ()=> {
     mainWindow.setMenu(null);
     mainWindow.loadURL(`file://${__dirname}/Views/index.html`);
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
-    mainWindow.on('closed', ()=> {
+    mainWindow.on("closed", ()=> {
         mainWindow = null;
         alertManager.Stop();
         crawlingManager.Stop();
@@ -57,7 +58,7 @@ app.on("ready", ()=> {
 });
 
 app.on("window-all-closed", () => { 
-  if (process.platform !== 'darwin') {
+  if (process.platform !== "darwin") {
     app.quit()
   }
   alertManager.Stop();
@@ -65,8 +66,41 @@ app.on("window-all-closed", () => {
 });
 
 _eventEmit.on("alert", ()=>{
-    console.log("alert");
+
+    if(!config.isAlert) return false;
+    let datas = crawlingManager.Page(1, crawlingManager.Total());
+    config.Emails.forEach(email => {
+        alertManager.SendMails(email, `[${config.Keywords.toString()}] 조회 결과`, MailContent(datas));
+    });
+    crawlingManager.Clear();
 });
+
+function MailContent(datas)
+{
+    let html = `
+    <table style="border:1px solid; border-collapse: collapse;">
+    <thead><tr>
+    <th style="border:1px solid">Index</th>
+    <th style="border:1px solid">Title</th>
+    <th style="border:1px solid">Writer</th>
+    <th style="border:1px solid">Date</th>
+    <th style="border:1px solid">이동</th>
+    </tr></thead>
+    <tbody>`;
+
+    for(let i=0; i<datas.length; ++i)
+    {
+        html += `<tr>
+            <td style="border:1px solid">${datas[i].Index}</td>
+            <td style="border:1px solid">${datas[i].Title}</td>
+            <td style="border:1px solid">${datas[i].Writer}</td>
+            <td style="border:1px solid">${datas[i].Date.toLocaleDateString()}</td>
+            <td style="border:1px solid"><a href="https://cafe.naver.com/joonggonara/${datas[i].index}">이동</a></td></tr>`;
+    }
+    `</tbody>
+    </table>`
+    return html;
+}
 
 ipcMain.on("start", (event, status)=>{
     if(status === "true")
@@ -86,10 +120,16 @@ ipcMain.on("getConfig", (event) =>{
 });
 
 ipcMain.on("setConfig", (event, args) =>{
-    config.Keywords = args._keywords;
-    config.Emails = args._emails;
-    config.PerDay = args._perDay;
-    config.AlertPeriod = args._alertPeriod;
+    
+    for(let i=0; i< args.keywords.length; ++i)
+    {
+        args.keywords[i] = args.keywords[i].trim();
+    }
+    config.Keywords = args.keywords;
+    config.Emails = args.emails;
+    config.PerDay = args.perDay;
+    config.AlertPeriod = args.alertPeriod;
+    config.isAlert = args.isAlert === "true";
 
     fs.writeFileSync("./config.json", JSON.stringify(config, null, 2));
 

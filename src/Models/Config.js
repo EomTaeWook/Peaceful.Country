@@ -2,7 +2,7 @@
 
 module.exports = class Config
 {
-    constructor(delayMillisecond, keywords, emails, perDay, alertPeriod, index, isRecency)
+    constructor(delayMillisecond, keywords, emails, perDay, alertPeriod, index, isRecency, isAlert)
     {
         this.delayMillisecond = delayMillisecond;
         this.keywords = keywords;        
@@ -11,6 +11,7 @@ module.exports = class Config
         this.alertPeriod = alertPeriod;
         this.index = index;
         this.isRecency = isRecency;
+        this.isAlert = isAlert;
     }
     get DelayMillisecond()
     {
@@ -20,7 +21,8 @@ module.exports = class Config
     {
         this.delayMillisecond = value;
     }
-    get Keywords(){
+    get Keywords()
+    {
         return this.keywords;
     }
     set Keywords(value)
@@ -66,5 +68,13 @@ module.exports = class Config
     set IsRecency(value)
     {
         this.isRecency = value;
+    }
+    get IsAlert()
+    {
+        return this.isAlert;
+    }
+    set IsAlert(value)
+    {
+        this.isAlert = value;
     }
 }

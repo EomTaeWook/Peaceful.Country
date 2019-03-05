@@ -46,6 +46,11 @@
           <input type="text" data-role="spinner" id="numPerDay" data-buttons-position="right" value="1" data-min-Value="1">
           <label for="alertPeriod">알람 주기(분)</label>            
           <input type="text" data-role="spinner" id="numAlertPeriod" data-buttons-position="right" value="30" data-min-Value="30">
+          <label for="isAlert">알람 수신 여부</label>            
+          <select data-role="select" id="selIsAlert">
+            <option value="true">예</option>
+            <option value="false">아니요</option>
+          </select>
           <!-- email -->
           <div style="margin-top: 5px;">
             <label for="emails">
@@ -67,12 +72,12 @@
             </div>
             <!-- email -->
         </div>
+
         <div class="dialog-actions">
             <button class="button js-dialog-close">닫기</button>
             <button class="button primary" id="btnSave">저장</button>
         </div>
-    </div>
-    
+    </div>    
     <script>
       require("./index.js");
     </script>

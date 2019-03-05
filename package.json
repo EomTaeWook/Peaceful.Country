@@ -1,7 +1,16 @@
 {
+  "main" : "src/Main.js",
+  "scripts": {
+    "start": "electron src/Main.js",
+    "build": "electron-packager . PeacefulCountry",
+    "package": "asar pack PeacefulCountry-win32-x64/resources/app PeacefulCountry-win32-x64/Resources/app.asar"
+  },
+
   "dependencies": {
+    "asar": "^1.0.0",
     "charset": "^1.0.1",
     "electron": "^4.0.6",
+    "electron-packager": "^13.1.0",
     "iconv-lite": "^0.4.24",
     "nodemailer": "^5.1.1",
     "request": "^2.88.0"

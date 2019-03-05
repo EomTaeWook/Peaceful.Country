@@ -31,10 +31,14 @@ module.exports = class CrawlingManager
     {
         this._isStart = false;
     }
+    Clear()
+    {
+        this._caches.Clear();
+    }
     Page(page, row)
     {
         let index = (page - 1) * row;
-        return this._caches.Values.slice(index, index + row);
+        return this._caches.Values.sort((left, right) => parseInt(left.index) > parseInt(right.index)).slice(index, index + row);
     }
     Total()
     {

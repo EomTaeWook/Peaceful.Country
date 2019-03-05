@@ -88,9 +88,9 @@ btnSave.addEventListener("click", (event)=>{
     emailDatas.forEach(item =>{
         emails.push(item.innerHTML);
     });
-
-    let config = new Config(-1,keywords, emails, perDay, alertPeriod, 0, false );
-    console.log(config);
+    let isAlert = $("#selIsAlert").data("select").val();
+    let config = new Config(-1, keywords, emails, perDay, alertPeriod, 0, false,  isAlert);
+    //console.log(config);
     ipcRenderer.send("setConfig", config);
     Metro.dialog.close(".dialog");
 });
@@ -103,6 +103,7 @@ ipcRenderer.on("getConfig",(event, args)=>{
     perDay.value = args.perDay;
     let alertPeriod = document.getElementById("numAlertPeriod");
     alertPeriod.value = args.alertPeriod;
+    $("#selIsAlert").data("select").val(args.isAlert);
 
     let email = document.getElementById("emails");
     email.innerHTML = "";
@@ -114,14 +115,14 @@ ipcRenderer.on("getConfig",(event, args)=>{
 
 
  ipcRenderer.on("dataBind", (event, args) =>{
-    console.log(args);
+    //console.log(args);
     let pageHtml = document.getElementsByClassName("pagination")[0];
     pageHtml.innerHTML = "";
     CreatePage(args, pageHtml);
 
     let body = document.getElementById("body");
     body.innerHTML = "";
-
+    //console.log(`datas Count : ${args.datas.length}`);
     for(let i=args.datas.length - 1; i>=0; --i)
     {
         let row = body.insertRow(body.rows.length);

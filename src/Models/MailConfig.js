@@ -4,18 +4,18 @@ module.exports = class MailConfig
 {
     constructor(service, user, password)
     {
-        this._service = service;
-        this._user = user;
-        this._password = password;
+        this.service = service;
+        this.user = user;
+        this.password = password;
     }
     get Service(){
-        return this._service;
+        return this.service;
     }
     get Auth()
     {
         return {
-            user : this._user,
-            pass: this._password
+            user : this.user,
+            pass: this.password
         };
     }
 }

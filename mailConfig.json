@@ -1,5 +1,5 @@
 {
-    "service": "naver",
+    "service": "gmail",
     "auth" :{
         "user": "user",
         "password": "password"
