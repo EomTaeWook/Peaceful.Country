@@ -3,6 +3,7 @@
 window.$ = window.jQuery = require("../wwwroot/js/jquery-3.3.1.min.js");
 const ipcRenderer = require("electron").ipcRenderer;
 const Config = require("../Models/Config.js");
+const Shell = require("electron").shell;
 
  let btnConfig = document.getElementById("btnConfig");
  btnConfig.addEventListener("click", (event)=>{
@@ -13,6 +14,13 @@ const Config = require("../Models/Config.js");
 
  let page = 1;
  let reqeustData = undefined;
+
+
+let btnGithub = document.getElementById("btnGithub");
+btnGithub.addEventListener("click", (event) =>{
+    event.preventDefault();
+    Shell.openExternal(`https://github.com/EomTaeWook/Peaceful.Country`);
+});
 
  let btnStart = document.getElementById("btnStart");
  btnStart.addEventListener("click", (event)=>{
