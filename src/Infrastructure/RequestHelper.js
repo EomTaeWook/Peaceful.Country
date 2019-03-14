@@ -25,8 +25,21 @@ module.exports = class RequestHelper
             }
             let dataArray = [];
             req(option, (err, res, body) =>{
-                if(err) reject(err);
-                if(!res.headers || res.headers === undefined) reject(undefined);
+                if(err) 
+                {
+                    reject(err);
+                    return;
+                }
+                if(!res === null || res === undefined)
+                {
+                    reject(err);
+                    return;
+                } 
+                if(!Object.prototype.hasOwnProperty.call(res, "headers")) 
+                {
+                    reject(undefined);
+                    return;
+                }
                 let encoding = charset(res.headers, body);
                 let resultBody = iconv.decode(body, encoding);
 
