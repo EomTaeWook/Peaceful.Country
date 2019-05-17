@@ -43,12 +43,11 @@ alertManager.Init(_eventEmit, config);
 let mainWindow = null;
 
 app.on("ready", ()=> {
-
     mainWindow = new BrowserWindow({width: 1270, height: 860});
     mainWindow.setMenu(null);
     mainWindow.loadURL(`file://${__dirname}/Views/index.html`);
 
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     mainWindow.on("closed", ()=> {
         mainWindow = null;
@@ -103,6 +102,7 @@ function MailContent(datas)
 }
 
 ipcMain.on("start", (event, status)=>{
+    
     if(status === "true")
     {
         crawlingManager.Start();

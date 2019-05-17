@@ -6,7 +6,7 @@
   "emails": [
     ""
   ],
-  "perDay": "1",
+  "perDay": "2",
   "alertPeriod": "60",
   "index": 0,
   "isRecency": false,
