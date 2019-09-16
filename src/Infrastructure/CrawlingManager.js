@@ -87,7 +87,7 @@ async function RunCrawling()
             })());
         }
         let results = await Promise.all(promises);
-        await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 500) + 1);
+        await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 1000) + 1);
         // console.log(results);
         if(!results.some(r=>r))
         {
