@@ -47,7 +47,7 @@ app.on("ready", ()=> {
     mainWindow.setMenu(null);
     mainWindow.loadURL(`file://${__dirname}/Views/index.html`);
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.on("closed", ()=> {
         mainWindow = null;
