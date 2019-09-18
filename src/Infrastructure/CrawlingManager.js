@@ -9,8 +9,8 @@ module.exports = class CrawlingManager
     constructor()
     {
         this._requestHelper = new RequestHelper();
-        //this._url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10050146&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="
-        this._url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10286641&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="
+        this._url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10050146&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="
+        //this._url = "https://cafe.naver.com/ArticleList.nhn?search.clubid=10286641&userDisplay=50&search.boardtype=L&search.specialmenutype=&search.questionTab=A&search.totalCount=501&search.page="
         
         this._beginPage = 1;
         this._caches = new Cache();
@@ -88,7 +88,7 @@ async function RunCrawling()
         }
         let results = await Promise.all(promises);
         await Sleep(this._config.DelayMillisecond + Math.floor(Math.random() * 1000) + 1);
-        // console.log(results);
+        console.log(results);
         if(!results.some(r=>r))
         {
             index = 1;
@@ -125,13 +125,10 @@ async function Process(pageIndex)
                         let title = /\S.*/.exec(/(?<=<a.*atitle.*>)([^<]+[^<\/])(?=<\/a>)/g.exec(row[1])[1]);
                         let date = /[^"\s]+/.exec(/(?<=<td.*>)([\s]+?(\d{4}.\d{2}.\d{2}.)|(\d{2}:\d{2}))(?=([\s]+)?<\/td>)/g.exec(row[1])[1]);
                         // let writer = /<a.*class=.*m-tcol-c.*]*>(.*?)<\/a>/g.exec(row[1]);
-                        let writer = /(?<=<td.*class="p-nick".*>)((?!<\/span>)([^\s]+))(?=((<img)|(<\/a)))/g.exec(row[1]);
-                        if(!writer)
-                        {
-                            console.log("test");
-                        }
-                        console.log(index[2] + " : " + title[0] + " : " + writer[1] + " : " + date[0]);
-                        dataArray.push(new Information(index[2], title[0], writer[1], date[0]));
+                        let writer = /(?<=>).*/g.exec(/(?<=\<td.*class="p-nick".*\>)(.*)(?=(<\/a>))/g.exec(row[1])[0]);
+                        //let writer = /(?<=<td.*class="p-nick".*>)((?!<\/span>)([^\s]+))(?=((<img)|(<\/a)))/g.exec(row[1]);
+                        //console.log(index[2] + " : " + title[0] + " : " + writer[0] + " : " + date[0]);
+                        dataArray.push(new Information(index[2], title[0], writer[0], date[0]));
                     }
                 }
         }
