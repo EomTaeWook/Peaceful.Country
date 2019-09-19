@@ -27,6 +27,9 @@ Node.js 연습겸 만들어 보는 중고나라 Crawler
         2.2 mailConfig.json 에서 gmail 계정 및 비밀번호 설정
 
         2.3 config.json 또는 설정 => emails에 받을 사람 email 주소 입력
+    3.키워드
+        
+        1.구분자는 , 를 사용합니다. ex)test1,test2
 
 버그 레포팅
 
