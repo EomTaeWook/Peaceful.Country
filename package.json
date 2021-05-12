@@ -12,7 +12,7 @@
     "electron": "^4.0.6",
     "electron-packager": "^13.1.0",
     "iconv-lite": "^0.4.24",
-    "nodemailer": "^5.1.1",
+    "nodemailer": "^6.4.16",
     "request": "^2.88.0"
   }
 }
