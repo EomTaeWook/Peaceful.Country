@@ -9,7 +9,7 @@
   "dependencies": {
     "asar": "^1.0.0",
     "charset": "^1.0.1",
-    "electron": "^4.0.6",
+    "electron": "^13.6.6",
     "electron-packager": "^13.1.0",
     "iconv-lite": "^0.4.24",
     "nodemailer": "^5.1.1",
